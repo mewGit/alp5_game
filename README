@@ -1,0 +1,10 @@
+Pong Clone for more than 2 players with netwerk support
+
+We will use the Lightweight Java Game Library (LWJGL) for this project.
+source	http://lwjgl.org/
+
+##Milestones##
+[ ]	prototype 2 player offline
+[ ]	more than 2 players support
+[ ]	network support server/client
+[ ]	applet/browser support
