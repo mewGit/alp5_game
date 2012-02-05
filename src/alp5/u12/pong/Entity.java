@@ -4,14 +4,14 @@ import org.lwjgl.util.Rectangle;
 
 public abstract class Entity {
 	
-	protected double x,y,dx,dy;
+	protected float x,y,dx,dy;
 	protected Sprite sprite;
 	protected Rectangle me;
 	private boolean solid,collides;
-	private Game game;
+	protected Game game;
 	
 
-	public Entity(Game game, String ref, double x, double y, boolean solid) {
+	public Entity(Game game, String ref, float x, float y, boolean solid) {
 		this.game = game;
 		sprite = SpriteStore.get().getSprite(ref);
 		this.x = x;
@@ -26,4 +26,5 @@ public abstract class Entity {
 		return me.intersects(other.me);
 	}
 	
+	public abstract void draw();
 }
