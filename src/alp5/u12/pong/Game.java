@@ -48,7 +48,7 @@ public class Game {
 		long lastLoopStart = System.nanoTime();
 		Boarder boarder = new Boarder();
 		Ball ball = new Ball(this, "sprites/ball.png", 0, 0);
-		ball.setSpeed(8f, 8f);
+		ball.setSpeed(3f, 3f);
 		entitieList.add(ball);
 		int collision = 0;
 		

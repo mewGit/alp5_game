@@ -19,9 +19,17 @@ public class Ball extends Entity {
 	}
 	
 	public void move() {
-		// XXX: ball can go off screen for high speeds
-		x += dx;
-		y += dy;
+		float f = 1.0f;
+		if (x+8 + dx > 640)
+			f = (640-(x+8))/dx;
+		else if (x + dx < 0)
+			f = x/-dx;
+		if (y+8 + dy > 480)
+			f = (480-(y+8))/dy;
+		else if (y + dy < 0)
+			f = y/-dy;
+		x += dx*f;
+		y += dy*f;
 	}
 	
 	public void setSpeed(float dx, float dy) {

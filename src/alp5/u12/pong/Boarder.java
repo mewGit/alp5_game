@@ -2,7 +2,7 @@ package alp5.u12.pong;
 
 public class Boarder {
 	
-	private int up,low,left,right;
+	protected int up,low,left,right;
 	
 	public Boarder() {
 		up = 0;
