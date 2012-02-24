@@ -2,20 +2,20 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/failure/workbench/alp5_game/lib/jinput.jar" sourcepath="/home/failure/workbench/LWJGL/lwjgl-source-2.8.3.zip">
+	<classpathentry kind="lib" path="/home/mt/workspace/alp5_game/lib/jinput.jar" sourcepath="/home/failure/workbench/LWJGL/lwjgl-source-2.8.3.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/home/failure/workbench/LWJGL/javadoc/"/>
+			<attribute name="javadoc_location" value="file:/home/mt/workspace/javadoc_lwjgl/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/failure/workbench/alp5_game/lib/lwjgl.jar" sourcepath="/home/failure/workbench/LWJGL/lwjgl-source-2.8.3.zip">
+	<classpathentry kind="lib" path="/home/mt/workspace/alp5_game/lib/lwjgl.jar" sourcepath="/home/failure/workbench/LWJGL/lwjgl-source-2.8.3.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/home/failure/workbench/LWJGL/javadoc/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/failure/workbench/alp5_game/lib/native/linux"/>
+			<attribute name="javadoc_location" value="file:/home/mt/workspace/javadoc_lwjgl/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/mt/workspace/alp5_game/lib/native/linux"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/failure/workbench/alp5_game/lib/lwjgl_util.jar" sourcepath="/home/failure/workbench/LWJGL/lwjgl-source-2.8.3.zip">
+	<classpathentry kind="lib" path="/home/mt/workspace/alp5_game/lib/lwjgl_util.jar" sourcepath="/home/failure/workbench/LWJGL/lwjgl-source-2.8.3.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/home/failure/workbench/LWJGL/javadoc/"/>
+			<attribute name="javadoc_location" value="file:/home/mt/workspace/javadoc_lwjgl/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

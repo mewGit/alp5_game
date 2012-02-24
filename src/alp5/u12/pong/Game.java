@@ -47,10 +47,16 @@ public class Game {
 		long lastFPSUpdate = 0;
 		long lastLoopStart = System.nanoTime();
 		Boarder boarder = new Boarder();
-		Ball ball = new Ball(this, "sprites/ball.png", 0, 0);
+		Ball ball = new Ball(this, 320, 240);
 		ball.setSpeed(3f, 3f);
 		entitieList.add(ball);
+		//player
+		Player player1 = new Player(this, 16, (height/2)-32);
+		Player player2 = new Player(this, 616, (height/2)-32);
+		entitieList.add(player1);
+		entitieList.add(player2);
 		int collision = 0;
+		int playercollision = 0;
 		
 		while(gameRunning) {
 			// variables for the FPS and loop time 
@@ -74,7 +80,10 @@ public class Game {
 			
 			// TODO: game logic
 			ball.move();
+			player1.move();
+			player2.move();
 			collision = boarder.collides(ball);
+			collision += player1.collides(ball);
 			ball.handleCollision(collision);
 			
 			// TODO: rendering

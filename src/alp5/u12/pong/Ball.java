@@ -4,8 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 public class Ball extends Entity {
 
-	public Ball(Game game, String ref, float x, float y) {
-		super(game, ref, x, y, true);
+	public Ball(Game game, float x, float y) {
+		super(game, x, y, true);
 		dx = 0;
 		dy = 0;
 	}
