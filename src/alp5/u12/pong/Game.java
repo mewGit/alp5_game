@@ -54,6 +54,11 @@ public class Game {
 		Ball ball = new Ball(this, "ball.png", 0, 0);
 		ball.setSpeed(1.5f, 1.5f);
 		entitieList.add(ball);
+		//player
+		Player player1 = new Player(this, "player.png", 16, (height/2)-32);
+		Player player2 = new Player(this, "player.png",616, (height/2)-32);
+		entitieList.add(player1);
+		entitieList.add(player2);
 		int collision = 0;
 		
 		while(gameRunning) {
@@ -78,7 +83,10 @@ public class Game {
 			
 			// TODO: game logic
 			ball.move();
+			player1.move();
+			player2.move();
 			collision = boarder.collides(ball);
+			collision += player1.collides(ball);
 			ball.handleCollision(collision);
 			
 			// TODO: rendering
