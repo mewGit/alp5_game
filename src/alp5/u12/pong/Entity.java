@@ -9,7 +9,6 @@ public abstract class Entity {
 	private Rectangle me = new Rectangle();; 
 	private Rectangle him = new Rectangle();
 	private boolean solid,collides;
-	
 
 	public Entity(Sprite sprite, float x, float y, boolean solid) {
 		this.sprite = sprite;
@@ -26,6 +25,9 @@ public abstract class Entity {
 		return me.intersects(him);
 	}
 	
+	/**
+	 * render the texture associated with that entity
+	 */
 	public void draw() {
 		sprite.draw( (int)x , (int)y );
 	}

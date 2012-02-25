@@ -21,7 +21,7 @@ public class Game {
 	}
 	
 	private void init() {
-		// init window
+		// Initialize window
 		try {
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create();
@@ -31,7 +31,7 @@ public class Game {
 		}
 		Display.setTitle(windowTitle);
 		
-		// init OpenGL
+		// Initialize OpenGL
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -43,7 +43,7 @@ public class Game {
 	}
 	
 	public void mainLoop() {
-		// init variables
+		// Initialize local variables
 		LinkedList<Entity> entitieList = new LinkedList<Entity>(); 
 		boolean gameRunning = true;
 		int fps = 0;

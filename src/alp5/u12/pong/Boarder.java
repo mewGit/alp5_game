@@ -16,11 +16,11 @@ public class Boarder {
 		int val = 0;
 		int width = ball.sprite.getWidth();
 		int height = ball.sprite.getHeight();
-		if (ball.x <= left)
+		if (ball.x+width <= left)
 			val = 2;
 		else if (ball.x+width >= right)
 			val = 2;
-		if (ball.y <= up)
+		if (ball.y+height <= up)
 			val += 1;
 		else if (ball.y+height >= low)
 			val += 1;
