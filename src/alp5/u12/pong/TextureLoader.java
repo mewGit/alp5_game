@@ -53,6 +53,7 @@ import java.util.Hashtable;
 import javax.swing.ImageIcon;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -73,10 +74,10 @@ public class TextureLoader {
     /** The table of textures that have been loaded in this loader */
     private HashMap<String, Texture> table = new HashMap<String, Texture>();
 
-    /** The colour model including alpha for the GL image */
+    /** The color model including alpha for the GL image */
     private ColorModel glAlphaColorModel;
 
-    /** The colour model for the GL image */
+    /** The color model for the GL image */
     private ColorModel glColorModel;
 
     /** Scratch buffer for texture ID's */
@@ -107,8 +108,8 @@ public class TextureLoader {
      * @return A new texture ID
      */
     private int createTextureID() {
-      glGenTextures(textureIDBuffer);
-      return textureIDBuffer.get(0);
+    	GL11.glGenTextures(textureIDBuffer);
+    	return textureIDBuffer.get(0);
     }
 
     /**
@@ -126,10 +127,10 @@ public class TextureLoader {
         }
 
         tex = getTexture(resourceName,
-                         GL_TEXTURE_2D, // target
-                         GL_RGBA,     // dst pixel format
-                         GL_LINEAR, // min filter (unused)
-                         GL_LINEAR);
+        		GL11.GL_TEXTURE_2D, // target
+        		GL11.GL_RGBA,     // dst pixel format
+        		GL11.GL_LINEAR, // min filter (unused)
+        		GL11.GL_LINEAR);
 
         table.put(resourceName,tex);
 
@@ -160,7 +161,7 @@ public class TextureLoader {
         Texture texture = new Texture(target,textureID);
 
         // bind this texture
-        glBindTexture(target, textureID);
+        GL11.glBindTexture(target, textureID);
 
         BufferedImage bufferedImage = loadImage(resourceName);
         texture.setWidth(bufferedImage.getWidth());
@@ -176,19 +177,19 @@ public class TextureLoader {
         ByteBuffer textureBuffer = convertImageData(bufferedImage,texture);
 
         if (target == GL_TEXTURE_2D) {
-            glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
-            glTexParameteri(target, GL_TEXTURE_MAG_FILTER, magFilter);
+        	GL11.glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
+        	GL11.glTexParameteri(target, GL_TEXTURE_MAG_FILTER, magFilter);
         }
 
         // produce a texture from the byte buffer
-        glTexImage2D(target,
+        GL11.glTexImage2D(target,
                       0,
                       dstPixelFormat,
                       get2Fold(bufferedImage.getWidth()),
                       get2Fold(bufferedImage.getHeight()),
                       0,
                       srcPixelFormat,
-                      GL_UNSIGNED_BYTE,
+                      GL11.GL_UNSIGNED_BYTE,
                       textureBuffer );
 
         return texture;

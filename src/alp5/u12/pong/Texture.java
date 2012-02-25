@@ -33,6 +33,8 @@ package alp5.u12.pong;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * A texture to be bound within OpenGL. This object is responsible for
  * keeping track of a given OpenGL texture and for calculating the
@@ -87,7 +89,7 @@ public class Texture {
 	 * Bind the specified GL context to a texture
 	 */
 	public void bind() {
-		glBindTexture(target, textureID);
+		GL11.glBindTexture(target, textureID);
 	}
 
 	/**
