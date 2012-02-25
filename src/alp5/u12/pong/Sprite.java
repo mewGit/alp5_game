@@ -60,14 +60,14 @@ public class Sprite {
 	 * @param ref A reference to the image on which this sprite should be based
 	 */
 	public Sprite(TextureLoader loader, String ref) {
-    try {
-			texture = loader.getTexture(ref);
-      width = texture.getImageWidth();
-      height = texture.getImageHeight();
-    } catch (IOException ioe) {
-    	ioe.printStackTrace();
-      System.exit(-1);
-    }
+	    try {
+	    	texture = loader.getTexture(ref);
+	    	width = texture.getImageWidth();
+	    	height = texture.getImageHeight();
+	    } catch (IOException ioe) {
+	    	ioe.printStackTrace();
+	      System.exit(-1);
+	    }
 	}
 
 	/**
@@ -108,16 +108,16 @@ public class Sprite {
 		glBegin(GL_QUADS);
 		{
 			glTexCoord2f(0, 0);
-			glVertex2f(0, 0);
-
-			glTexCoord2f(0, texture.getHeight());
 			glVertex2f(0, height);
-
-			glTexCoord2f(texture.getWidth(), texture.getHeight());
+			
+			glTexCoord2f(texture.getWidth(), 0);
 			glVertex2f(width, height);
 
-			glTexCoord2f(texture.getWidth(), 0);
+			glTexCoord2f(texture.getWidth(), texture.getHeight());
 			glVertex2f(width, 0);
+			
+			glTexCoord2f(0, texture.getHeight());
+			glVertex2f(0, 0);
 		}
 		glEnd();
 
