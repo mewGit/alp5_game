@@ -6,25 +6,27 @@ public abstract class Entity {
 	
 	protected float x,y,dx,dy;
 	protected Sprite sprite;
-	protected Rectangle me;
+	private Rectangle me = new Rectangle();; 
+	private Rectangle him = new Rectangle();
 	private boolean solid,collides;
-	protected Game game;
 	
 
-	public Entity(Game game, String ref, float x, float y, boolean solid) {
-		this.game = game;
-		sprite = SpriteStore.get().getSprite(ref);
+	public Entity(Sprite sprite, float x, float y, boolean solid) {
+		this.sprite = sprite;
 		this.x = x;
 		this.y = y;
 		this.solid = solid;
 		collides = false;
-		me = new Rectangle();
-		me.setSize(sprite.getWidth(), sprite.getHeight());
 	}
 	
 	public boolean collidesWith(Entity other) {
-		return me.intersects(other.me);
+		me.setBounds((int) x, (int) y, sprite.getWidth(), sprite.getHeight());
+		him.setBounds((int) other.x, (int) other.y, other.sprite.getWidth(), other.sprite.getHeight());
+		
+		return me.intersects(him);
 	}
 	
-	public abstract void draw();
+	public void draw() {
+		sprite.draw( (int)x , (int)y );
+	}
 }

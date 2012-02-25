@@ -1,7 +1,6 @@
 package alp5.u12.pong;
 
 import java.util.LinkedList;
-import java.util.Random;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -13,6 +12,7 @@ public class Game {
 	
 	protected int width,height;
 	private String windowTitle = "Pong Clone Prototype";
+	private TextureLoader textureLoader;
 	
 	public Game(int width, int heigth) {
 		this.width = width;
@@ -32,10 +32,14 @@ public class Game {
 		Display.setTitle(windowTitle);
 		
 		// init OpenGL
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, width, 0, height, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		
+		textureLoader = new TextureLoader();
 	}
 	
 	public void mainLoop() {
@@ -47,8 +51,8 @@ public class Game {
 		long lastFPSUpdate = 0;
 		long lastLoopStart = System.nanoTime();
 		Boarder boarder = new Boarder();
-		Ball ball = new Ball(this, "sprites/ball.png", 0, 0);
-		ball.setSpeed(3f, 3f);
+		Ball ball = new Ball(this, "ball.png", 0, 0);
+		ball.setSpeed(1.5f, 1.5f);
 		entitieList.add(ball);
 		int collision = 0;
 		
@@ -104,5 +108,9 @@ public class Game {
 	public static void main(String[] args) {
 		Game game = new Game(640,480);
 		game.mainLoop();
+	}
+
+	public Sprite getSprite(String ref) {
+		return new Sprite(textureLoader, ref);
 	}
 }
