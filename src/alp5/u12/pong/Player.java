@@ -4,14 +4,16 @@ import org.lwjgl.input.Keyboard;
 
 public class Player extends Entity {
 
+	protected boolean player1;
 	protected int up = 0;
 	protected int low = 480;
 	protected int left = 0;
 	protected int right = 640;
 	private float speed = 3.0f;
 	
-	public Player(Game game, String ref, float x, float y) {
+	public Player(Game game, String ref, float x, float y, boolean player1) {
 		super(game, game.getSprite(ref), x, y, true);
+		this.player1 = player1;
 		dx = 0;
 		dy = 0;
 	}
@@ -30,15 +32,20 @@ public class Player extends Entity {
 	// collisions:	none = 0	upper = lower = 1	left = right = 2
 	public int collides(Ball ball) {
 		int val = 0;
-		if (((ball.x+ball.sprite.getWidth()== x) &&
+		if (!player1) {
+				if ((ball.x+ball.sprite.getWidth() >= x) &&
 				(ball.y+ball.sprite.getHeight() >= y) && 
-				(ball.y <= y+sprite.getHeight())) || 
-				((ball.x == x+sprite.getWidth()) && 
-				(ball.y+ball.sprite.getHeight() >= y) &&
-				(ball.y <= y+sprite.getHeight()))) {
-			val = 4;
+				(ball.y <= y+sprite.getHeight())) {
+					ball.x = x-ball.sprite.getWidth();
+					val = 4;
+				}
 		} else {
-
+				if((ball.x <= x+sprite.getWidth()) && 
+					(ball.y+ball.sprite.getHeight() >= y) &&
+					(ball.y <= y+sprite.getHeight())) {
+						ball.x = x+sprite.getWidth();
+						val = 4;
+				}
 		}
 		return val;
 	}
