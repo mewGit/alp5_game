@@ -19,7 +19,6 @@ public class Ball extends Entity {
 	}
 	
 	public void move() {
-		// TODO: make positions relative
 		float f = 1.0f;
 		int spriteWidth = sprite.getWidth();
 		int spriteHeight = sprite.getHeight();

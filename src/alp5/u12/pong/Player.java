@@ -8,6 +8,7 @@ public class Player extends Entity {
 	protected int low = 480;
 	protected int left = 0;
 	protected int right = 640;
+	private float speed = 3.0f;
 	
 	public Player(Game game, String ref, float x, float y) {
 		super(game, game.getSprite(ref), x, y, true);
@@ -15,22 +16,18 @@ public class Player extends Entity {
 		dy = 0;
 	}
 
-	// collisions:	none = 0	upper = lower = 1	left = rigth = 2
-//	public void handleCollision(int val) {
-//		if ((val & 1) == 1)
-//			dy = -dy;
-//		if ((val & 2) == 2)
-//			dx = -dx;
-//	}
+	// collisions:	none = 0	upper = lower = 1	left = right = 2
+	public void handleCollision(int val) {
+	}
 	
 	public void move() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) 
-			y += -3;
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) 
-			y += 3;
+			y = (y-speed > 0) ? y-speed : 0;
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP))
+			y = (y+speed < height-sprite.getHeight()) ? y+speed : height-sprite.getHeight();
 	}
 	
-	// collisions:	none = 0	upper = lower = 1	left = rigth = 2
+	// collisions:	none = 0	upper = lower = 1	left = right = 2
 	public int collides(Ball ball) {
 		int val = 0;
 		if (((ball.x+ball.sprite.getWidth()== x) &&

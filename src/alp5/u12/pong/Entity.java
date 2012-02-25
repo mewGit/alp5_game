@@ -28,6 +28,8 @@ public abstract class Entity {
 		return me.intersects(him);
 	}
 	
+	public abstract void handleCollision(int val);
+	
 	/**
 	 * render the texture associated with that entity
 	 */
