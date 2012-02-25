@@ -47,14 +47,16 @@ public class Player extends Entity {
 	// collisions:	none = 0	upper = lower = 1	left = rigth = 2
 	public int collides(Ball ball) {
 		int val = 0;
-		if (ball.x <= left)
-			val = 2;
-		else if (ball.x+8 >= right)
-			val = 2;
-		if (ball.y <= up)
-			val += 1;
-		else if (ball.y+8 >= low)
-			val += 1;
+		if (((ball.x+ball.sprite.getWidth()== x) &&
+				(ball.y+ball.sprite.getHeight() >= y) && 
+				(ball.y <= y+sprite.getHeight())) || 
+				((ball.x == x+sprite.getWidth()) && 
+				(ball.y+ball.sprite.getHeight() >= y) &&
+				(ball.y <= y+sprite.getHeight()))) {
+			val = 4;
+		} else {
+
+		}
 		return val;
 	}
 	

@@ -14,6 +14,8 @@ public class Ball extends Entity {
 			dy = -dy;
 		if ((val & 2) == 2)
 			dx = -dx;
+		if ((val & 4) == 4)
+			dx = -dx;
 	}
 	
 	public void move() {
