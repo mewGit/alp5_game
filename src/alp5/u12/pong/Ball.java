@@ -3,7 +3,7 @@ package alp5.u12.pong;
 public class Ball extends Entity {
 
 	public Ball(Game game, String ref, float x, float y) {
-		super(game.getSprite(ref), x, y, true);
+		super(game, game.getSprite(ref), x, y, true);
 		dx = 0;
 		dy = 0;
 	}
@@ -19,14 +19,14 @@ public class Ball extends Entity {
 	public void move() {
 		// TODO: make positions relative
 		float f = 1.0f;
-		int width = sprite.getWidth();
-		int height = sprite.getHeight();
-		if (x+width + dx > 640)
-			f = (640-(x+width))/dx;
+		int spriteWidth = sprite.getWidth();
+		int spriteHeight = sprite.getHeight();
+		if (x+spriteWidth + dx > width)
+			f = (width-(x+spriteWidth))/dx;
 		else if (x + dx < 0)
 			f = x/-dx;
-		if (y+height + dy > 480)
-			f = (480-(y+height))/dy;
+		if (y+spriteHeight + dy > height)
+			f = (height-(y+spriteHeight))/dy;
 		else if (y + dy < 0)
 			f = y/-dy;
 		x += dx*f;

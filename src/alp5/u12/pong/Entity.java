@@ -6,11 +6,14 @@ public abstract class Entity {
 	
 	protected float x,y,dx,dy;
 	protected Sprite sprite;
+	protected int width,height;
 	private Rectangle me = new Rectangle();; 
 	private Rectangle him = new Rectangle();
 	private boolean solid,collides;
 
-	public Entity(Sprite sprite, float x, float y, boolean solid) {
+	public Entity(Game game, Sprite sprite, float x, float y, boolean solid) {
+		width = game.width;
+		height = game.height;
 		this.sprite = sprite;
 		this.x = x;
 		this.y = y;

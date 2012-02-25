@@ -2,27 +2,25 @@ package alp5.u12.pong;
 
 public class Boarder {
 	
-	protected int up,low,left,right;
+	private int heigth,width;
 	
-	public Boarder() {
-		up = 0;
-		low = 480;
-		left = 0;
-		right = 640;
+	public Boarder(Game game) {
+		heigth = game.height;
+		width = game.width;
 	}
 
 	// collisions:	none = 0	upper = lower = 1	left = right = 2
-	public int collides(Ball ball) {
+	public int collides(Entity entity) {
 		int val = 0;
-		int width = ball.sprite.getWidth();
-		int height = ball.sprite.getHeight();
-		if (ball.x+width <= left)
+		int entityWidth = entity.sprite.getWidth();
+		int ballHeight = entity.sprite.getHeight();
+		if (entity.x <= 0)
 			val = 2;
-		else if (ball.x+width >= right)
+		else if (entity.x+entityWidth >= width)
 			val = 2;
-		if (ball.y+height <= up)
+		if (entity.y <= 0)
 			val += 1;
-		else if (ball.y+height >= low)
+		else if (entity.y+ballHeight >= heigth)
 			val += 1;
 		return val;
 	}
