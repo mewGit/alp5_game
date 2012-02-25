@@ -57,12 +57,12 @@ public class Game {
 		long lastFPSUpdate = 0;
 		long lastLoopStart = System.nanoTime();
 		Boarder boarder = new Boarder(this);
-		Ball ball = new Ball(this, "ball.png", 0, 0);
-		ball.setSpeed(1f, 1f);
+		Ball ball = new Ball(this, "ball.png", 500, 240);
+		ball.setSpeed(-8f, 0f);
 		entitieList.add(ball);
 		//player
-		Player player1 = new Player(this, "player.png", 16, (height/2)-32);
-		Player player2 = new Player(this, "player.png",616, (height/2)-32);
+		Player player1 = new Player(this, "player.png", 16, (height/2)-32, true);
+		Player player2 = new Player(this, "player.png",616, (height/2)-32, false);
 		entitieList.add(player1);
 		entitieList.add(player2);
 		int collision = 0;
@@ -93,8 +93,10 @@ public class Game {
 			ball.move();
 			player1.move();
 			player2.move();
+			collision = 0;
 			collision = boarder.collides(ball);
-//			collision += player1.collides(ball);
+			collision += player1.collides(ball);
+			collision += player2.collides(ball);
 			ball.handleCollision(collision);
 			
 			// TODO: rendering
