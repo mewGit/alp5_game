@@ -31,8 +31,6 @@
  */
 package alp5.u12.pong;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import org.lwjgl.opengl.GL11;
 
 /**

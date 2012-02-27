@@ -35,8 +35,6 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
-import static org.lwjgl.opengl.GL11.*;
-
 /**
  * Implementation of sprite that uses an OpenGL quad and a texture
  * to render a given image to the screen.

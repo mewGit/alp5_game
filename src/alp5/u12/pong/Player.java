@@ -5,20 +5,18 @@ import org.lwjgl.input.Keyboard;
 public class Player extends Entity {
 
 	protected boolean player1;
-	protected int up = 0;
-	protected int low = 480;
-	protected int left = 0;
-	protected int right = 640;
 	private float speed = 3.0f;
 	
-	public Player(Game game, String ref, float x, float y, boolean player1) {
-		super(game, game.getSprite(ref), x, y, true);
+	public Player(Game game, String ref, boolean player1) {
+		super(game, game.getSprite(ref), true);
 		this.player1 = player1;
+		x = (this.player1) ? 0+16 : game.width-boxWidth-16;
+		y = (game.height-boxHeight)/2;
 		dx = 0;
 		dy = 0;
 	}
 
-	// collisions:	none = 0	upper = lower = 1	left = right = 2
+	// collisions:	none = 0	upper = lower = 1	left = right = 2	player = 4
 	public void handleCollision(int val) {
 	}
 	
@@ -26,26 +24,21 @@ public class Player extends Entity {
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) 
 			y = (y-speed > 0) ? y-speed : 0;
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP))
-			y = (y+speed < height-sprite.getHeight()) ? y+speed : height-sprite.getHeight();
+			y = (y+speed < height-boxHeight) ? y+speed : height-boxHeight;
 	}
 	
-	// collisions:	none = 0	upper = lower = 1	left = right = 2
 	public int collides(Ball ball) {
 		int val = 0;
 		if (!player1) {
-				if ((ball.x+ball.sprite.getWidth() >= x) &&
-				(ball.y+ball.sprite.getHeight() >= y) && 
-				(ball.y <= y+sprite.getHeight())) {
-					ball.x = x-ball.sprite.getWidth();
-					val = 4;
-				}
+			if ((ball.x+ball.boxWidth >= x) && (ball.y+ball.boxHeight >= y) && (ball.y <= y+boxHeight)) {
+				ball.x = x-ball.boxWidth;
+				val = 4;
+			}
 		} else {
-				if((ball.x <= x+sprite.getWidth()) && 
-					(ball.y+ball.sprite.getHeight() >= y) &&
-					(ball.y <= y+sprite.getHeight())) {
-						ball.x = x+sprite.getWidth();
-						val = 4;
-				}
+			if((ball.x <= x+boxWidth) && (ball.y+ball.boxHeight >= y) && (ball.y <= y+boxHeight)) {
+				ball.x = x+boxWidth;
+				val = 4;
+			}
 		}
 		return val;
 	}

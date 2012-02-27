@@ -30,7 +30,7 @@ public class Game {
 			Display.create();
 			
 			Display.setTitle(windowTitle);
-//			Mouse.setGrabbed(true);
+			Mouse.setGrabbed(true);
 			
 			// Initialize OpenGL
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -57,12 +57,12 @@ public class Game {
 		long lastFPSUpdate = 0;
 		long lastLoopStart = System.nanoTime();
 		Boarder boarder = new Boarder(this);
-		Ball ball = new Ball(this, "ball.png", 500, 240);
-		ball.setSpeed(-8f, 0f);
+		Ball ball = new Ball(this, "ball.png", width/2, height/2);
+		ball.setSpeed(-5f, 2f);
 		entitieList.add(ball);
 		//player
-		Player player1 = new Player(this, "player.png", 16, (height/2)-32, true);
-		Player player2 = new Player(this, "player.png",616, (height/2)-32, false);
+		Player player1 = new Player(this, "player.png", true);
+		Player player2 = new Player(this, "player.png", false);
 		entitieList.add(player1);
 		entitieList.add(player2);
 		int collision = 0;
@@ -124,7 +124,7 @@ public class Game {
 	}
 	
 	public static void main(String[] args) {
-		Game game = new Game(640,480);
+		Game game = new Game(800,480);
 		game.mainLoop();
 	}
 

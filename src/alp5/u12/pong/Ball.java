@@ -3,7 +3,9 @@ package alp5.u12.pong;
 public class Ball extends Entity {
 
 	public Ball(Game game, String ref, float x, float y) {
-		super(game, game.getSprite(ref), x, y, true);
+		super(game, game.getSprite(ref), true);
+		this.x = x;
+		this.y = y;
 		dx = 0;
 		dy = 0;
 	}

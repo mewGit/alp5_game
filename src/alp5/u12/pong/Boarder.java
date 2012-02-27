@@ -12,15 +12,13 @@ public class Boarder {
 	// collisions:	none = 0	upper = lower = 1	left = right = 2
 	public int collides(Entity entity) {
 		int val = 0;
-		int entityWidth = entity.sprite.getWidth();
-		int entityHeight = entity.sprite.getHeight();
 		if (entity.x <= 0)
 			val = 2;
-		else if (entity.x+entityWidth >= width)
+		else if (entity.x+entity.boxWidth >= width)
 			val = 2;
 		if (entity.y <= 0)
 			val += 1;
-		else if (entity.y+entityHeight >= heigth)
+		else if (entity.y+entity.boxHeight >= heigth)
 			val += 1;
 		return val;
 	}

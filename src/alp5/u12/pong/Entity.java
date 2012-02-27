@@ -5,18 +5,20 @@ import org.lwjgl.util.Rectangle;
 public abstract class Entity {
 	
 	protected float x,y,dx,dy;
+	protected int boxWidth,boxHeight;
 	protected Sprite sprite;
 	protected int width,height;
 	private Rectangle me = new Rectangle();; 
 	private Rectangle him = new Rectangle();
 	private boolean solid,collides;
 
-	public Entity(Game game, Sprite sprite, float x, float y, boolean solid) {
+	public Entity(Game game, Sprite sprite, boolean solid) {
 		width = game.width;
 		height = game.height;
 		this.sprite = sprite;
-		this.x = x;
-		this.y = y;
+		// later this will be the hit box for
+		boxWidth = this.sprite.getWidth();
+		boxHeight = this.sprite.getHeight();
 		this.solid = solid;
 		collides = false;
 	}
