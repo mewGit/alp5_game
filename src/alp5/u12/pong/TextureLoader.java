@@ -239,9 +239,11 @@ public class TextureLoader {
         // create a raster that can be used by OpenGL as a source
         // for a texture
         if (bufferedImage.getColorModel().hasAlpha()) {
+        	System.out.println("Debug: Alpha");
             raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,4,null);
             texImage = new BufferedImage(glAlphaColorModel,raster,false,new Hashtable());
         } else {
+        	System.out.println("Debug: no Alpha");
             raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,3,null);
             texImage = new BufferedImage(glColorModel,raster,false,new Hashtable());
         }

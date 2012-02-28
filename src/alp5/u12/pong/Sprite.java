@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2010 LWJGL Project
+  * Copyright (c) 2002-2010 LWJGL Project
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -99,11 +99,14 @@ public class Sprite {
 		glPushMatrix();
 
 		// bind to the appropriate texture for this sprite
+		glEnable(GL_BLEND); 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		texture.bind();
 
 		// translate to the right location and prepare to draw
 		glTranslatef(x, y, 0);
-
 		// draw a quad textured to match the sprite
 		glBegin(GL_QUADS);
 		{

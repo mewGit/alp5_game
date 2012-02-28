@@ -33,6 +33,8 @@ public class Game {
 			Mouse.setGrabbed(true);
 			
 			// Initialize OpenGL
+			glDisable(GL_LIGHTING);
+			glDisable(GL_DITHER);
 			glEnable(GL_TEXTURE_2D);
 			glDisable(GL_DEPTH_TEST);
 			glMatrixMode(GL_PROJECTION);
@@ -58,12 +60,12 @@ public class Game {
 		long lastLoopStart = System.nanoTime();
 		Background background = new Background(this, "background.png");
 		Boarder boarder = new Boarder(this);
-		Ball ball = new Ball(this, "ball.png", width/2, height/2);
+		Ball ball = new Ball(this, "ball_2.png", width/2, height/2);
 		ball.setSpeed(-2f, 2f);
 		entitieList.add(ball);
 		//player
-		Player player1 = new Player(this, "player.png", true);
-		Player player2 = new Player(this, "player.png", false);
+		Player player1 = new Player(this, "player_left.png", true);
+		Player player2 = new Player(this, "player_right.png", false);
 		entitieList.add(player1);
 		entitieList.add(player2);
 		int collision = 0;
@@ -113,8 +115,6 @@ public class Game {
 			if ((delta = (16666667 + lastLoopStart - System.nanoTime())/1000000) > 10 ) {
 				try {
 					//System.out.println("Debug: sleep " + delta + "ms");
-					System.out.println(ball.dy);
-					System.out.println(ball.dx);
 					Thread.sleep(delta);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
