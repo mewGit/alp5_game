@@ -33,7 +33,7 @@ package alp5.u12.pong;
 
 import java.io.IOException;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Implementation of sprite that uses an OpenGL quad and a texture
@@ -96,32 +96,32 @@ public class Sprite {
 	 */
 	public void draw(int x, int y) {
 		// store the current model matrix
-		GL11.glPushMatrix();
+		glPushMatrix();
 
 		// bind to the appropriate texture for this sprite
 		texture.bind();
 
 		// translate to the right location and prepare to draw
-		GL11.glTranslatef(x, y, 0);
+		glTranslatef(x, y, 0);
 
 		// draw a quad textured to match the sprite
-		GL11.glBegin(GL11.GL_QUADS);
+		glBegin(GL_QUADS);
 		{
-			GL11.glTexCoord2f(0, 0);
-			GL11.glVertex2f(0, height);
+			glTexCoord2f(0, 0);
+			glVertex2f(0, height);
 			
-			GL11.glTexCoord2f(texture.getWidth(), 0);
-			GL11.glVertex2f(width, height);
+			glTexCoord2f(texture.getWidth(), 0);
+			glVertex2f(width, height);
 
-			GL11.glTexCoord2f(texture.getWidth(), texture.getHeight());
-			GL11.glVertex2f(width, 0);
+			glTexCoord2f(texture.getWidth(), texture.getHeight());
+			glVertex2f(width, 0);
 			
-			GL11.glTexCoord2f(0, texture.getHeight());
-			GL11.glVertex2f(0, 0);
+			glTexCoord2f(0, texture.getHeight());
+			glVertex2f(0, 0);
 		}
-		GL11.glEnd();
+		glEnd();
 
 		// restore the model view matrix to prevent contamination
-		GL11.glPopMatrix();
+		glPopMatrix();
 	}
 }

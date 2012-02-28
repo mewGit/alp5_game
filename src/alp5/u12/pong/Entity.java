@@ -16,7 +16,7 @@ public abstract class Entity {
 		width = game.width;
 		height = game.height;
 		this.sprite = sprite;
-		// later this will be the hit box for
+		// later this will be the hit box for collision
 		boxWidth = this.sprite.getWidth();
 		boxHeight = this.sprite.getHeight();
 		this.solid = solid;

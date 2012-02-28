@@ -5,7 +5,7 @@ import org.lwjgl.input.Keyboard;
 public class Player extends Entity {
 
 	protected boolean player1;
-	private float speed = 3.0f;
+	private float speed = 4.0f;
 	
 	public Player(Game game, String ref, boolean player1) {
 		super(game, game.getSprite(ref), true);

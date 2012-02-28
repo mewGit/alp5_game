@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
+import static org.lwjgl.opengl.Display.*;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 	
@@ -24,22 +24,22 @@ public class Game {
 	private void init() {
 		try {
 			// Initialize window
-			Display.setDisplayMode(new DisplayMode(width, height));
+			setDisplayMode(new DisplayMode(width, height));
 			// XXX: does it work?
-			Display.setVSyncEnabled(true);
-			Display.create();
+			setVSyncEnabled(true);
+			create();
 			
-			Display.setTitle(windowTitle);
+			setTitle(windowTitle);
 			Mouse.setGrabbed(true);
 			
 			// Initialize OpenGL
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0, width, 0, height, 1, -1);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glViewport(0, 0, width, height);
+			glEnable(GL_TEXTURE_2D);
+			glDisable(GL_DEPTH_TEST);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0, width, 0, height, 1, -1);
+			glMatrixMode(GL_MODELVIEW);
+			glViewport(0, 0, width, height);
 			
 			textureLoader = new TextureLoader();
 		} catch (LWJGLException e) {
@@ -56,9 +56,10 @@ public class Game {
 		long delta = 0;
 		long lastFPSUpdate = 0;
 		long lastLoopStart = System.nanoTime();
+		Background background = new Background(this, "background.png");
 		Boarder boarder = new Boarder(this);
 		Ball ball = new Ball(this, "ball.png", width/2, height/2);
-		ball.setSpeed(-5f, 2f);
+		ball.setSpeed(-2f, 2f);
 		entitieList.add(ball);
 		//player
 		Player player1 = new Player(this, "player.png", true);
@@ -75,14 +76,14 @@ public class Game {
 			fps++;
 			// refresh FPS in title every second
 			if (lastFPSUpdate >= 1000000000) {
-				Display.setTitle(windowTitle +" (FPS: "+fps+")");
+				setTitle(windowTitle +" (FPS: "+fps+")");
 				lastFPSUpdate = 0;
 				fps = 0;
 			}
 			// clear the render buffer
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
 			// input handling
 			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				gameRunning = false;
@@ -100,14 +101,15 @@ public class Game {
 			ball.handleCollision(collision);
 			
 			// TODO: rendering
+			background.draw();
 			for (Entity entity : entitieList) {
 				entity.draw();
 			}
 			
 			// display changes
-			Display.update();
+			update();
 			// LWJGL takes care of frame limiting; section can be removed 
-/*			// frame limiter; max FPS = 60  
+			// frame limiter; max FPS = 60  
 			if ((delta = (16666667 + lastLoopStart - System.nanoTime())/1000000) > 10 ) {
 				try {
 					System.out.println("Debug: sleep " + delta + "ms");
@@ -117,10 +119,10 @@ public class Game {
 					e.printStackTrace();
 				}
 			}
-*/
+
 		}
 		// clear up and exit
-		Display.destroy();
+		destroy();
 	}
 	
 	public static void main(String[] args) {
