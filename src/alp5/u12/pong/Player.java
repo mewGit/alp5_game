@@ -16,10 +16,6 @@ public class Player extends Entity {
 		dy = 0;
 	}
 
-	// collisions:	none = 0	upper = lower = 1	left = right = 2	player = 4
-	public void handleCollision(int val) {
-	}
-	
 	public void move() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) 
 			y = (y-speed > 0) ? y-speed : 0;
@@ -57,5 +53,10 @@ public class Player extends Entity {
 	public void setSpeed(float dx, float dy) {
 		this.dx = dx;
 		this.dy = dy;
+	}
+
+	@Override
+	public void handleCollision(int val) {
+		// TODO Auto-generated method stub
 	}
 }

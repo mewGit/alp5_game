@@ -14,7 +14,7 @@ public class Game {
 	protected int width,height;
 	private String windowTitle = "Pong Clone Prototype";
 	private TextureLoader textureLoader;
-	
+
 	public Game(int width, int heigth) {
 		this.width = width;
 		this.height = heigth;
@@ -25,8 +25,6 @@ public class Game {
 		try {
 			// Initialize window
 			setDisplayMode(new DisplayMode(width, height));
-			// XXX: does it work?
-			setVSyncEnabled(true);
 			create();
 			
 			setTitle(windowTitle);
@@ -54,14 +52,17 @@ public class Game {
 		// Initialize local variables
 		LinkedList<Entity> entitieList = new LinkedList<Entity>(); 
 		boolean gameRunning = true;
+		boolean serve = false;
 		int fps = 0;
 		long delta = 0;
 		long lastFPSUpdate = 0;
 		long lastLoopStart = System.nanoTime();
+		Score score = new Score(10);
+		int[] s = new int[2];
 		Background background = new Background(this, "background.png");
 		Boarder boarder = new Boarder(this);
-		Ball ball = new Ball(this, "ball_2.png", width/2, height/2);
-		ball.setSpeed(-2f, 2f);
+		Ball ball = new Ball(this, "ball.png", width/2, height/2);
+		ball.setSpeed(-8f, 0f);
 		entitieList.add(ball);
 		//player
 		Player player1 = new Player(this, "player_left.png", true);
@@ -93,6 +94,10 @@ public class Game {
 			}
 			
 			// TODO: game logic
+			if (serve) {
+				serve = false;
+				ball.serve(collision >> 5);
+			}
 			ball.move();
 			player1.move();
 			player2.move();
@@ -101,6 +106,13 @@ public class Game {
 			collision += player1.collides(ball);
 			collision += player2.collides(ball);
 			ball.handleCollision(collision);
+
+			if ((collision >> 5) > 0) {
+				serve = true;
+				score.incScore(collision >> 5);
+				s = score.getScore();
+				System.out.println("Debug: Score\n\tPlayer 1: "+s[0] +"\t Player 2: "+s[1]);
+			}
 			
 			// TODO: rendering
 			background.draw();

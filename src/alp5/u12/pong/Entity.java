@@ -8,11 +8,13 @@ public abstract class Entity {
 	protected int boxWidth,boxHeight;
 	protected Sprite sprite;
 	protected int width,height;
+	protected Game game;
 	private Rectangle me = new Rectangle();; 
 	private Rectangle him = new Rectangle();
 	private boolean solid,collides;
 
 	public Entity(Game game, Sprite sprite, boolean solid) {
+		this.game = game;
 		width = game.width;
 		height = game.height;
 		this.sprite = sprite;

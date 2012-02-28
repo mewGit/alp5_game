@@ -1,6 +1,12 @@
 package alp5.u12.pong;
 
+import java.util.Random;
+
 public class Ball extends Entity {
+	
+	private Random random = new Random();
+	private final int startDist = 48;
+	private final int maxSpeed = 8;
 
 	public Ball(Game game, String ref, float x, float y) {
 		super(game, game.getSprite(ref), true);
@@ -18,23 +24,23 @@ public class Ball extends Entity {
 			dx = -dx;
 		if ((val & 4) == 4){ // ball hits player (both in same direction)
 			dx = -dx*1.15f;
-			if (dy > Math.abs(3.2))
-				dy = (float)Math.sqrt(dy);
-			else dy = dy*0.8f;
+			if (Math.abs(dy) > 2.0f)
+				dy = dy*0.8f;
+			else {
+				dx = dx*0.8f;
+				dy = dy*1.5f;
+			}
 			System.out.println("same");
 		}
 		if ((val & 8) == 8){ // ball hits player without movement
 			dx = -dx;
-			if (dy > Math.abs(3.2))
-				dy = (float)Math.sqrt(dy);
 			System.out.println("no move");
 		}	
 		if ((val & 16) == 16){ // ball hits player (both in different directions)
-			dx = -dx*0.9f;
-			if (dy > Math.abs(3.2))
-				dy = (float)Math.sqrt(dy);
-			else
-			dy = dy*1.4f;
+			if (Math.sqrt(dx*dx + dy*dy) < maxSpeed) {
+				dx = -dx*1.1f;
+				dy = dy*1.4f;
+			}
 			System.out.println("different");
 		}
 	}
@@ -58,5 +64,19 @@ public class Ball extends Entity {
 	public void setSpeed(float dx, float dy) {
 		this.dx = dx;
 		this.dy = dy;
+	}
+	
+	public void serve(int player) {
+		if (player == 1) {
+			y = random.nextInt(height-boxHeight);
+			x = startDist;
+			dx = 3 + random.nextInt(2);
+			dy = -2 + random.nextInt(2);
+		} else {
+			y = random.nextInt(height-boxHeight);
+			x = width-startDist;
+			dx = -5 + random.nextInt(2);
+			dy = -2 + random.nextInt(2);
+		}
 	}
 }

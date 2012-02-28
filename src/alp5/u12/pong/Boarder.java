@@ -13,9 +13,9 @@ public class Boarder {
 	public int collides(Entity entity) {
 		int val = 0;
 		if (entity.x <= 0)
-			val = 2;
+			val = 64;
 		else if (entity.x+entity.boxWidth >= width)
-			val = 2;
+			val = 32;
 		if (entity.y <= 0)
 			val += 1;
 		else if (entity.y+entity.boxHeight >= heigth)
