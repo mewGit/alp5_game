@@ -112,7 +112,9 @@ public class Game {
 			// frame limiter; max FPS = 60  
 			if ((delta = (16666667 + lastLoopStart - System.nanoTime())/1000000) > 10 ) {
 				try {
-					System.out.println("Debug: sleep " + delta + "ms");
+					//System.out.println("Debug: sleep " + delta + "ms");
+					System.out.println(ball.dy);
+					System.out.println(ball.dx);
 					Thread.sleep(delta);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

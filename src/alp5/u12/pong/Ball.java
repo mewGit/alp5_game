@@ -16,8 +16,27 @@ public class Ball extends Entity {
 			dy = -dy;
 		if ((val & 2) == 2)
 			dx = -dx;
-		if ((val & 4) == 4)
+		if ((val & 4) == 4){ // ball hits player (both in same direction)
+			dx = -dx*1.15f;
+			if (dy > Math.abs(3.2))
+				dy = (float)Math.sqrt(dy);
+			else dy = dy*0.8f;
+			System.out.println("same");
+		}
+		if ((val & 8) == 8){ // ball hits player without movement
 			dx = -dx;
+			if (dy > Math.abs(3.2))
+				dy = (float)Math.sqrt(dy);
+			System.out.println("no move");
+		}	
+		if ((val & 16) == 16){ // ball hits player (both in different directions)
+			dx = -dx*0.9f;
+			if (dy > Math.abs(3.2))
+				dy = (float)Math.sqrt(dy);
+			else
+			dy = dy*1.4f;
+			System.out.println("different");
+		}
 	}
 	
 	public void move() {

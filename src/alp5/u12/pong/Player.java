@@ -29,15 +29,26 @@ public class Player extends Entity {
 	
 	public int collides(Ball ball) {
 		int val = 0;
-		if (!player1) {
+		//right player
+		if (!player1) { 
 			if ((ball.x+ball.boxWidth >= x) && (ball.y+ball.boxHeight >= y) && (ball.y <= y+boxHeight)) {
 				ball.x = x-ball.boxWidth;
-				val = 4;
+				if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy < 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy > 0)) {
+					val = 4;
+				} else if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy > 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy < 0)) {
+					val = 16;
+				} else val = 8;
+				
 			}
+		//left player	
 		} else {
 			if((ball.x <= x+boxWidth) && (ball.y+ball.boxHeight >= y) && (ball.y <= y+boxHeight)) {
 				ball.x = x+boxWidth;
-				val = 4;
+				if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy < 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy > 0)) {
+					val = 4;
+				} else if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy > 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy < 0)) {
+					val = 16;
+				} else val = 8;
 			}
 		}
 		return val;
