@@ -33,7 +33,7 @@ public class Ball extends Entity {
 			System.out.println("same");
 		}
 		if ((val & 8) == 8){ // ball hits player without movement
-			dx = -dx;
+			dx = -dx*1.01f;
 			System.out.println("no move");
 		}	
 		if ((val & 16) == 16){ // ball hits player (both in different directions)

@@ -48,17 +48,20 @@ public class Game {
 		}
 	}
 	
-	public void mainLoop(boolean host) {
+	public void mainLoop() {
+		// Initialize title screen
+		boolean titleactive = true;
+		int choosebutton = 0;
+		Background titlescreen = new Background(this, "titlescreen.png");
+		Button activebutton = new Button(this, "active_button.png", (int) width/10+190, 144);
+		// title screen buttons
+		Button hostbutton = new Button(this, "host_button.png", (int) width/10, 134);
+		Button joinbutton = new Button(this, "join_button.png", (int) width/10, 72);
+		Button quitbutton = new Button(this, "quit_button.png", (int) width/10, 10);
 		// Initialize local variables
 		LinkedList<Entity> entitieList = new LinkedList<Entity>();
 		Connection connection = new Connection(this);
-		if (host) {
-			connection.connect(1234);
-			System.out.println("Debug: connected");
-		} else {
-			connection.connect("localhost", 1234);
-			System.out.println("Debug: connected");
-		}
+		boolean host = false;
 		boolean gameRunning = true;
 		boolean serve = false;
 		int fps = 0;
@@ -100,41 +103,83 @@ public class Game {
 				gameRunning = false;
 				System.out.println("Debug: quit");
 			}
-			
-			// TODO: game logic
-			if (serve) {
-				serve = false;
-				ball.serve(collision >> 5);
-			}
-			ball.move();
-			if (host) {
-				player1.move();
-				connection.receivePlayerPos(player2);
-				connection.sendGameState(ball, player1, score);
-				collision = 0;
-				collision = boarder.collides(ball);
-				collision += player1.collides(ball);
-				collision += player2.collides(ball);
-				ball.handleCollision(collision);
+			// title screen
+			if (titleactive){
+				titlescreen.draw();
+				hostbutton.draw();
+				joinbutton.draw();
+				quitbutton.draw();
+				activebutton.draw();
+				while (titleactive && Keyboard.next()) {
+				    if (Keyboard.getEventKeyState()) {
+				    	if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+							choosebutton = ((--choosebutton % 3) + 3) % 3;
+							activebutton.y = 144-62*choosebutton;
+							System.out.println("Debug: Chooseoption:" + choosebutton);
+						}
+						if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+							choosebutton = ++choosebutton % 3;
+							activebutton.y = 144-62*choosebutton;
+							System.out.println("Debug: Chooseoption:" + choosebutton);
+						}
+						if (Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
+							switch (choosebutton) {
+							case 1:
+								System.out.println("Debug: join");
+								host = false;
+								connection.connect("localhost", 1234);
+								titleactive = false;
+								break;
+							case 2:	
+								gameRunning = false;
+								System.out.println("Debug: quit");
+								break;
+							default:
+								System.out.println("Debug: host");
+								host = true;
+								connection.connect(1234);
+								titleactive = false;
+								break;
+							}
+						}
+				    }
+				}
 			} else {
-				player2.move();
-				connection.sendPlayerPosition(player2);
-				connection.reciveGameState(ball, player1, score);
-			}
 
-			if ((collision >> 5) > 0) {
-				serve = true;
-				score.incScore(collision >> 5);
-				s = score.getScore();
-				System.out.println("Debug: Score\n\tPlayer 1: "+s[0] +"\t Player 2: "+s[1]);
-			}
-			
-			// TODO: rendering
-			background.draw();
-			for (Entity entity : entitieList) {
-				entity.draw();
-			}
-			
+				// TODO: game logic
+				if (serve) {
+					serve = false;
+					ball.serve(collision >> 5);
+				}
+				ball.move();
+				if (host) {
+					player1.move();
+					connection.receivePlayerPos(player2);
+					connection.sendGameState(ball, player1, score);
+					collision = 0;
+					collision = boarder.collides(ball);
+					collision += player1.collides(ball);
+					collision += player2.collides(ball);
+					ball.handleCollision(collision);
+				} else {
+					player2.move();
+					connection.sendPlayerPosition(player2);
+					connection.reciveGameState(ball, player1, score);
+				}
+
+				if ((collision >> 5) > 0) {
+					serve = true;
+					score.incScore(collision >> 5);
+					s = score.getScore();
+					System.out.println("Debug: Score\n\tPlayer 1: "+s[0] +"\t Player 2: "+s[1]);
+				}
+				
+				// TODO: rendering
+				background.draw();
+				for (Entity entity : entitieList) {
+					entity.draw();
+				}
+			}	
 			// display changes
 			update();
 			// LWJGL takes care of frame limiting; section can be removed 
@@ -156,13 +201,7 @@ public class Game {
 	
 	public static void main(String[] args) {
 		Game game = new Game(800,480);
-		if (args.length > 0) {
-			boolean host = false;
-			if (args[0].equals("host"))
-				host = true;
-			game.mainLoop(host);
-		}
-		System.out.println("Debug: wrong argument");
+		game.mainLoop();
 	}
 
 	public Sprite getSprite(String ref) {
