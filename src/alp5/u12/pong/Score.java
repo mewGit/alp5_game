@@ -2,7 +2,8 @@ package alp5.u12.pong;
 
 public class Score {
 
-	private int[] score; // [p1,p2]
+	protected int[] score; // [p1,p2]
+	protected boolean changed = false;
 	private int maxscore;
 	
 	public Score (int maxscore){
@@ -12,6 +13,7 @@ public class Score {
 		this.maxscore = maxscore;
 	}
 	protected int incScore(int player){
+		changed = true;
 		return ++score[player-1];
 	}
 	protected int[] getScore(){

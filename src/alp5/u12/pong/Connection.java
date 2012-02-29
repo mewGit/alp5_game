@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 public class Connection {
@@ -15,7 +16,7 @@ public class Connection {
 	private DatagramSocket socket;
 	private DatagramPacket packetSend, packetReceive;
 	private byte[] buf = new byte[128];
-	// 0 = player Y 1; 1 = ball X; 2 = ball Y; 3 = player1 score 4 = player2 score 
+	// 0 = player Y 1; 1 = ball X; 2 = ball Y; 3 = player1; score 4 = player2 score 
 	private float[] gameState = new float[5];
 	
 	public Connection(Game game) {
@@ -40,8 +41,11 @@ public class Connection {
 	}
 	
 	public void sendGameState(Ball ball, Player player, Score score) {
-		String tmp = Float.toString(player.y) +";"+ Float.toString(ball.x) +";"+ Float.toString(ball.y)
-				+";"+ score.getScore()[0] +";"+ score.getScore()[1];
+		String tmp = Float.toString(player.y) +";"+ Float.toString(ball.x) +";"+ Float.toString(ball.y);
+		if (score.changed) {
+			score.changed = false;
+			tmp += ";"+ score.getScore()[0] +";"+ score.getScore()[1];
+		}
 		packetSend.setData(tmp.getBytes(), 0, tmp.length());
 		try {
 			socket.send(packetSend);
@@ -57,6 +61,8 @@ public class Connection {
 			String[] tmp = (new String(packetReceive.getData(), 0, packetReceive.getLength())).split(";");
 			player.y = Float.valueOf(tmp[0]);
 			player.keyLastMove = Integer.parseInt(tmp[1]);
+		} catch (SocketTimeoutException e) {
+			// do nothing
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,6 +76,7 @@ public class Connection {
 			this.port = port;
 			packetSend = new DatagramPacket("Hello".getBytes(), 5, this.host, this.port);
 			socket = new DatagramSocket();
+			socket.setSoTimeout(50);
 			socket.send(packetSend);
 			packetReceive = new DatagramPacket(buf, buf.length);
 		} catch (UnknownHostException e) {
@@ -92,6 +99,8 @@ public class Connection {
 				player.y = Float.valueOf(tmp[0]);
 				ball.x = Float.valueOf(tmp[1]);
 				ball.y = Float.valueOf(tmp[2]);
+				score.score[0] = Integer.parseInt(tmp[3]);
+				score.score[1] = Integer.parseInt(tmp[4]);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
