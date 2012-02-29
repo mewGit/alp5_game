@@ -30,18 +30,15 @@ public class Ball extends Entity {
 				dx = dx*0.8f;
 				dy = dy*1.5f;
 			}
-			System.out.println("same");
 		}
 		if ((val & 8) == 8){ // ball hits player without movement
 			dx = -dx*1.01f;
-			System.out.println("no move");
 		}	
 		if ((val & 16) == 16){ // ball hits player (both in different directions)
 			if (Math.sqrt(dx*dx + dy*dy) < maxSpeed) {
 				dx = -dx*1.1f;
 				dy = dy*1.4f;
 			}
-			System.out.println("different");
 		}
 	}
 	
