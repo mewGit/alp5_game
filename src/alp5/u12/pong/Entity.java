@@ -32,6 +32,11 @@ public abstract class Entity {
 		return me.intersects(him);
 	}
 	
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public abstract void handleCollision(int val);
 	
 	/**

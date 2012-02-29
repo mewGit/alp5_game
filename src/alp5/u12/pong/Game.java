@@ -28,7 +28,7 @@ public class Game {
 			create();
 			
 			setTitle(windowTitle);
-			Mouse.setGrabbed(true);
+//			Mouse.setGrabbed(true);
 			
 			// Initialize OpenGL
 			glDisable(GL_LIGHTING);
@@ -48,9 +48,17 @@ public class Game {
 		}
 	}
 	
-	public void mainLoop() {
+	public void mainLoop(boolean host) {
 		// Initialize local variables
-		LinkedList<Entity> entitieList = new LinkedList<Entity>(); 
+		LinkedList<Entity> entitieList = new LinkedList<Entity>();
+		Connection connection = new Connection(this);
+		if (host) {
+			connection.connect(1234);
+			System.out.println("Debug: connected");
+		} else {
+			connection.connect("localhost", 1234);
+			System.out.println("Debug: connected");
+		}
 		boolean gameRunning = true;
 		boolean serve = false;
 		int fps = 0;
@@ -99,13 +107,20 @@ public class Game {
 				ball.serve(collision >> 5);
 			}
 			ball.move();
-			player1.move();
-			player2.move();
-			collision = 0;
-			collision = boarder.collides(ball);
-			collision += player1.collides(ball);
-			collision += player2.collides(ball);
-			ball.handleCollision(collision);
+			if (host) {
+				player1.move();
+				connection.receivePlayerPos(player2);
+				connection.sendGameState(ball, player1, score);
+				collision = 0;
+				collision = boarder.collides(ball);
+				collision += player1.collides(ball);
+				collision += player2.collides(ball);
+				ball.handleCollision(collision);
+			} else {
+				player2.move();
+				connection.sendPlayerPosition(player2);
+				connection.reciveGameState(ball, player1, score);
+			}
 
 			if ((collision >> 5) > 0) {
 				serve = true;
@@ -141,7 +156,13 @@ public class Game {
 	
 	public static void main(String[] args) {
 		Game game = new Game(800,480);
-		game.mainLoop();
+		if (args.length > 0) {
+			boolean host = false;
+			if (args[0].equals("host"))
+				host = true;
+			game.mainLoop(host);
+		}
+		System.out.println("Debug: wrong argument");
 	}
 
 	public Sprite getSprite(String ref) {
