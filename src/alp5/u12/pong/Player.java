@@ -5,6 +5,7 @@ import org.lwjgl.input.Keyboard;
 public class Player extends Entity {
 
 	protected boolean player1;
+	protected int keyLastMove = 0;
 	private float speed = 4.0f;
 	
 	public Player(Game game, String ref, boolean player1) {
@@ -17,10 +18,14 @@ public class Player extends Entity {
 	}
 
 	public void move() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) 
+		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) { 
 			y = (y-speed > 0) ? y-speed : 0;
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP))
+			keyLastMove = -1;
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			y = (y+speed < height-boxHeight) ? y+speed : height-boxHeight;
+			keyLastMove = 1;
+		} else
+			keyLastMove = 0;
 	}
 	
 	public int collides(Ball ball) {
@@ -29,9 +34,9 @@ public class Player extends Entity {
 		if (!player1) { 
 			if ((ball.x+ball.boxWidth >= x) && (ball.y+ball.boxHeight >= y) && (ball.y <= y+boxHeight)) {
 				ball.x = x-ball.boxWidth;
-				if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy < 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy > 0)) {
+				if ((keyLastMove == -1 && ball.dy < 0) || (keyLastMove == 1 && ball.dy > 0)) {
 					val = 4;
-				} else if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy > 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy < 0)) {
+				} else if ((keyLastMove == -1 && ball.dy > 0) || (keyLastMove == 1 && ball.dy < 0)) {
 					val = 16;
 				} else val = 8;
 				
@@ -40,9 +45,9 @@ public class Player extends Entity {
 		} else {
 			if((ball.x <= x+boxWidth) && (ball.y+ball.boxHeight >= y) && (ball.y <= y+boxHeight)) {
 				ball.x = x+boxWidth;
-				if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy < 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy > 0)) {
+				if ((keyLastMove == -1 && ball.dy < 0) || (keyLastMove == 1 && ball.dy > 0)) {
 					val = 4;
-				} else if ((Keyboard.isKeyDown(Keyboard.KEY_DOWN) && ball.dy > 0) || (Keyboard.isKeyDown(Keyboard.KEY_UP) && ball.dy < 0)) {
+				} else if ((keyLastMove == -1 && ball.dy > 0) || (keyLastMove == 1 && ball.dy < 0)) {
 					val = 16;
 				} else val = 8;
 			}

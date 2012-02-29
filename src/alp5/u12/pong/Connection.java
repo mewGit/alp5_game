@@ -15,7 +15,7 @@ public class Connection {
 	private DatagramSocket socket;
 	private DatagramPacket packetSend, packetReceive;
 	private byte[] buf = new byte[128];
-	// 0 = player Y; 1 = ball X; 2 = ball Y; 3 = player1 score 4 = player2 score 
+	// 0 = player Y 1; 1 = ball X; 2 = ball Y; 3 = player1 score 4 = player2 score 
 	private float[] gameState = new float[5];
 	
 	public Connection(Game game) {
@@ -54,8 +54,9 @@ public class Connection {
 	public void receivePlayerPos(Player player) {
 		try {
 			socket.receive(packetReceive);
-			String tmp = new String(packetReceive.getData(), 0, packetReceive.getLength());
-			player.y = Float.valueOf(tmp);
+			String[] tmp = (new String(packetReceive.getData(), 0, packetReceive.getLength())).split(";");
+			player.y = Float.valueOf(tmp[0]);
+			player.keyLastMove = Integer.parseInt(tmp[1]);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,7 +101,7 @@ public class Connection {
 	}
 	
 	public void sendPlayerPosition(Player player) {
-		String tmp = Float.toString(player.y);
+		String tmp = Float.toString(player.y)+";"+player.keyLastMove;
 		packetSend.setData(tmp.getBytes(), 0, tmp.length());
 		try {
 			socket.send(packetSend);

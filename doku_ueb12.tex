@@ -1,0 +1,92 @@
+\documentclass[a4paper,12pt]{article}
+
+\addtolength{\textwidth}{50pt}
+\addtolength{\evensidemargin}{-25pt}
+\addtolength{\oddsidemargin}{-25pt}
+
+\def\displayandname#1{\rlap{$\displaystyle\csname #1\endcsname$}%
+                      \qquad \texttt{\char92 #1}}
+\def\mathlexicon#1{$$\vcenter{\halign{\displayandname{##}\hfil&&\qquad
+                   \displayandname{##}\hfil\cr #1}}$$}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{color}
+
+\usepackage{listings}
+  \usepackage{courier}
+ \lstset{
+         basicstyle=\footnotesize\ttfamily, % Standardschrift
+         %numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+         %stepnumber=2,               % Abstand zwischen den Zeilennummern
+         numbersep=5pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs
+         extendedchars=true,         %
+         breaklines=true,            % Zeilen werden Umgebrochen
+         keywordstyle=\color{red},
+    		frame=b,         
+ %        keywordstyle=[1]\textbf,    % Stil der Keywords
+ %        keywordstyle=[2]\textbf,    %
+ %        keywordstyle=[3]\textbf,    %
+ %        keywordstyle=[4]\textbf,   \sqrt{\sqrt{}} %
+         stringstyle=\color{white}\ttfamily, % Farbe der String
+         showspaces=false,           % Leerzeichen anzeigen ?
+         showtabs=false,             % Tabs anzeigen ?
+         xleftmargin=17pt,
+         framexleftmargin=17pt,
+         framexrightmargin=5pt,
+         framexbottommargin=4pt,
+         %backgroundcolor=\color{lightgray},
+         showstringspaces=false      % Leerzeichen in Strings anzeigen ?        
+ }
+ \lstloadlanguages{% Check Dokumentation for further languages ...
+         %[Visual]Basic
+         %Pascal
+         %C
+         %C++
+         %XML
+         %HTML
+         Java
+ }
+    %\DeclareCaptionFont{blue}{\color{blue}} 
+
+  %\captionsetup[lstlisting]{singlelinecheck=false, labelfont={blue}, textfont={blue}}
+  \usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
+\usepackage{hyperref}
+	\hypersetup{
+		linktocpage,
+    	colorlinks,
+	    citecolor=black,
+	    filecolor=black,
+	    linkcolor=black,
+	    urlcolor=black
+	}
+
+\begin{document}
+
+\title{ALP 5, Übung 12 - PONG Clone Game}
+\author{Dominic Sanchez Exposito und Marcus Tscherner}
+\date{\today\\[3pt]
+Tutor: Marco Träger}
+\maketitle
+\tableofcontents
+
+\section{Spielauswahl}
+Wie der Titel schon vermuten lässt haben wir uns für eine netzwerkfähige Spielvariante des klassikers Pong entschieden, weil wir anfangs der Meinung waren das dieses recht einfache Spielprinzip gut umzusetzen wäre. 
+\section{Umsetzung}
+Für die Umsetzung nutzen wir als Hilfsmittel die Lightweight Java Game Libary. Mit der Bibliothek ist das Einbinden von Grafiken unter Nutzung von OpenGL und das Auslesen von Tastatubefehlen einfacher zu implementieren. Als Übertragungsprotokoll haben wir uns für das UDP entschieden.
+\subsection{Aufbau}
+Alle grafischen Bildelemente sind vom Typ Entity und erben deren Struktur.
+\section{Probleme}
+Die Problematik die sich bei einem Echtzeitspiel im Gegensatz zum rundenbasierten Spiel ergibt ist die, dass Host und Client synchronisiert werden müssen um nicht unterschiedliche Spielabläufe zu haben. Hierbei mach wir uns zu nutze, dass wird die Spiellogik nur vom Host aus berechnen lassen.
+\begin{lstlisting}[label=flickr, caption=show.php]
+insert code here
+\end{lstlisting}
+Ende
+\end{document}

@@ -61,6 +61,7 @@ public class Game {
 		// Initialize local variables
 		LinkedList<Entity> entitieList = new LinkedList<Entity>();
 		Connection connection = new Connection(this);
+		String ip = "";
 		boolean host = false;
 		boolean gameRunning = true;
 		boolean serve = false;
@@ -110,6 +111,8 @@ public class Game {
 				joinbutton.draw();
 				quitbutton.draw();
 				activebutton.draw();
+				ip = Readinput.getChar(ip);
+				System.out.println(ip);
 				while (titleactive && Keyboard.next()) {
 				    if (Keyboard.getEventKeyState()) {
 				    	if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
@@ -127,7 +130,7 @@ public class Game {
 							case 1:
 								System.out.println("Debug: join");
 								host = false;
-								connection.connect("192.168.66.55", 1234);
+								connection.connect("192.168.66.56", 1234);
 								titleactive = false;
 								break;
 							case 2:	
