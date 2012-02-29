@@ -127,7 +127,7 @@ public class Game {
 							case 1:
 								System.out.println("Debug: join");
 								host = false;
-								connection.connect("192.168.66.54", 1234);
+								connection.connect("192.168.66.55", 1234);
 								titleactive = false;
 								break;
 							case 2:	
