@@ -61,8 +61,8 @@ public class Connection {
 			String[] tmp = (new String(packetReceive.getData(), 0, packetReceive.getLength())).split(";");
 			player.y = Float.valueOf(tmp[0]);
 			player.keyLastMove = Integer.parseInt(tmp[1]);
-		} catch (SocketTimeoutException e) {
-			// do nothing
+//		} catch (SocketTimeoutException e) {
+//			// do nothing
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,7 +76,7 @@ public class Connection {
 			this.port = port;
 			packetSend = new DatagramPacket("Hello".getBytes(), 5, this.host, this.port);
 			socket = new DatagramSocket();
-			socket.setSoTimeout(50);
+//			socket.setSoTimeout(50);
 			socket.send(packetSend);
 			packetReceive = new DatagramPacket(buf, buf.length);
 		} catch (UnknownHostException e) {

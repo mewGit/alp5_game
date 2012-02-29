@@ -111,8 +111,8 @@ public class Game {
 				joinbutton.draw();
 				quitbutton.draw();
 				activebutton.draw();
-				ip = Readinput.getChar(ip);
-				System.out.println(ip);
+//				ip = Readinput.getChar(ip);
+//				System.out.println(ip);
 				while (titleactive && Keyboard.next()) {
 				    if (Keyboard.getEventKeyState()) {
 				    	if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
