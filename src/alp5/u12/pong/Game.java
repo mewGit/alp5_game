@@ -49,6 +49,15 @@ public class Game {
 	}
 	
 	public void mainLoop() {
+		// Initialise titlescreen
+		boolean titleactive = true;
+		int choosebutton = 0;
+		Background titlescreen = new Background(this, "titlescreen.png");
+		Button activebutton = new Button(this, "active_button.png", (int) width/10+190, 144);
+		// titlescreen buttons
+		Button hostbutton = new Button(this, "host_button.png", (int) width/10, 134);
+		Button joinbutton = new Button(this, "join_button.png", (int) width/10, 72);
+		Button quitbutton = new Button(this, "quit_button.png", (int) width/10, 10);
 		// Initialize local variables
 		LinkedList<Entity> entitieList = new LinkedList<Entity>(); 
 		boolean gameRunning = true;
@@ -92,34 +101,73 @@ public class Game {
 				gameRunning = false;
 				System.out.println("Debug: quit");
 			}
-			
-			// TODO: game logic
-			if (serve) {
-				serve = false;
-				ball.serve(collision >> 5);
-			}
-			ball.move();
-			player1.move();
-			player2.move();
-			collision = 0;
-			collision = boarder.collides(ball);
-			collision += player1.collides(ball);
-			collision += player2.collides(ball);
-			ball.handleCollision(collision);
+			// titlescreen
+			if (titleactive){
+				titlescreen.draw();
+				hostbutton.draw();
+				joinbutton.draw();
+				quitbutton.draw();
+				activebutton.draw();
+				while (Keyboard.next()) {
+				    if (Keyboard.getEventKeyState()) {
+				    	if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+							choosebutton = ((--choosebutton % 3) + 3) % 3;
+							activebutton.y = 144-62*choosebutton;
+							System.out.println("Debug: Chooseoption:" + choosebutton);
+						}
+						if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+							choosebutton = ++choosebutton % 3;
+							activebutton.y = 144-62*choosebutton;
+							System.out.println("Debug: Chooseoption:" + choosebutton);
+						}
+						if (Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
+							switch (choosebutton) {
+							case 1:
+								System.out.println("Debug: join");
+								break;
+							case 2:	
+								gameRunning = false;
+								System.out.println("Debug: quit");
+								break;
+							default:
+								System.out.println("Debug: host");
+								break;
+							}
 
-			if ((collision >> 5) > 0) {
-				serve = true;
-				score.incScore(collision >> 5);
-				s = score.getScore();
-				System.out.println("Debug: Score\n\tPlayer 1: "+s[0] +"\t Player 2: "+s[1]);
-			}
+						}
+				    }
+				}
+				
+							
+			} else {
 			
-			// TODO: rendering
-			background.draw();
-			for (Entity entity : entitieList) {
-				entity.draw();
-			}
-			
+				// TODO: game logic
+				if (serve) {
+					serve = false;
+					ball.serve(collision >> 5);
+				}
+				ball.move();
+				player1.move();
+				player2.move();
+				collision = 0;
+				collision = boarder.collides(ball);
+				collision += player1.collides(ball);
+				collision += player2.collides(ball);
+				ball.handleCollision(collision);
+	
+				if ((collision >> 5) > 0) {
+					serve = true;
+					score.incScore(collision >> 5);
+					s = score.getScore();
+					System.out.println("Debug: Score\n\tPlayer 1: "+s[0] +"\t Player 2: "+s[1]);
+				}
+				
+				// TODO: rendering
+				background.draw();
+				for (Entity entity : entitieList) {
+					entity.draw();
+				}
+			}	
 			// display changes
 			update();
 			// LWJGL takes care of frame limiting; section can be removed 
