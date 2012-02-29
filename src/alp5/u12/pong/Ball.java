@@ -32,26 +32,28 @@ public class Ball extends Entity {
 			}
 		}
 		if ((val & 8) == 8){ // ball hits player without movement
-			dx = -dx*1.01f;
+			if (Math.sqrt(dx*dx + dy*dy) < maxSpeed) 
+				dx = -dx*1.01f;
+			else
+				dx = -dx;
 		}	
 		if ((val & 16) == 16){ // ball hits player (both in different directions)
 			if (Math.sqrt(dx*dx + dy*dy) < maxSpeed) {
 				dx = -dx*1.1f;
 				dy = dy*1.4f;
-			}
+			} else 
+				dx = -dx;
 		}
 	}
 	
 	public void move() {
 		float f = 1.0f;
-		int spriteWidth = sprite.getWidth();
-		int spriteHeight = sprite.getHeight();
-		if (x+spriteWidth + dx > width)
-			f = (width-(x+spriteWidth))/dx;
+		if (x+boxWidth + dx > width)
+			f = (width-(x+boxWidth))/dx;
 		else if (x + dx < 0)
 			f = x/-dx;
-		if (y+spriteHeight + dy > height)
-			f = (height-(y+spriteHeight))/dy;
+		if (y+boxHeight + dy > height)
+			f = (height-(y+boxHeight))/dy;
 		else if (y + dy < 0)
 			f = y/-dy;
 		x += dx*f;
