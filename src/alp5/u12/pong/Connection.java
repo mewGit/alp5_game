@@ -8,6 +8,9 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import alp5.u12.pong.entitys.Ball;
+import alp5.u12.pong.entitys.Player;
+
 public class Connection {
 
 	private Game game;
@@ -31,6 +34,7 @@ public class Connection {
 			socket.receive(packetSend);
 			System.out.println("Debug: " + new String(packetSend.getData(), 0, packetSend.getLength()));
 			packetReceive = new DatagramPacket(buf, buf.length);
+			socket.setSoTimeout(50);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

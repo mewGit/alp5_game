@@ -13,6 +13,7 @@ public class Score {
 		this.maxscore = maxscore;
 	}
 	protected int incScore(int player){
+		// 'changed' used for network sync
 		changed = true;
 		return ++score[player-1];
 	}

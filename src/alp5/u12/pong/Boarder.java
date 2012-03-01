@@ -1,5 +1,7 @@
 package alp5.u12.pong;
 
+import alp5.u12.pong.entitys.Entity;
+
 public class Boarder {
 	
 	private int heigth,width;

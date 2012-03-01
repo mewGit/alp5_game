@@ -7,11 +7,19 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import static org.lwjgl.opengl.Display.*;
 import org.lwjgl.opengl.DisplayMode;
+
+import alp5.u12.pong.entitys.Background;
+import alp5.u12.pong.entitys.Ball;
+import alp5.u12.pong.entitys.Button;
+import alp5.u12.pong.entitys.Entity;
+import alp5.u12.pong.entitys.Player;
+import alp5.u12.pong.texture.Sprite;
+import alp5.u12.pong.texture.TextureLoader;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 	
-	protected int width,height;
+	public int width,height;
 	private String windowTitle = "Pong Clone Prototype";
 	private TextureLoader textureLoader;
 
@@ -35,11 +43,15 @@ public class Game {
 			glDisable(GL_DITHER);
 			glEnable(GL_TEXTURE_2D);
 			glDisable(GL_DEPTH_TEST);
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 			glOrtho(0, width, 0, height, 1, -1);
 			glMatrixMode(GL_MODELVIEW);
 			glViewport(0, 0, width, height);
+
 			
 			textureLoader = new TextureLoader();
 		} catch (LWJGLException e) {
@@ -130,7 +142,7 @@ public class Game {
 							case 1:
 								System.out.println("Debug: join");
 								host = false;
-								connection.connect("192.168.66.56", 1234);
+								connection.connect("192.168.66.51", 1234);
 								titleactive = false;
 								break;
 							case 2:	
