@@ -2,27 +2,31 @@ package alp5.u12.pong;
 
 public class Score {
 
-	protected int[] score; // [p1,p2]
-	protected boolean changed = false;
+	protected int p1, p2; // [p1,p2]
+	protected boolean changed;
 	private int maxscore;
+	private boolean winner;
 	
 	public Score (int maxscore){
-		score = new int[2];
-		score[0] = 0;
-		score[1] = 0;
+		p1 = 0;
+		p2 = 0;
+		changed = false;
+		winner = false;
 		this.maxscore = maxscore;
 	}
-	protected int incScore(int player){
-		// 'changed' used for network sync
+	protected boolean incScore(int player){
+		if (player == 1) p1++;
+		else p2++;
+		winner = (p1 == maxscore || p2 == maxscore);
+		// used for network score sync
 		changed = true;
-		return ++score[player-1];
+		return winner; 
 	}
-	protected int[] getScore(){
-		return score;
-	}
+
 	protected void resetScore(){
-		score[0] = 0;
-		score[1] = 0;
+		p1 = 0;
+		p2 = 0;
+		winner = false;
 	}
 	
 }

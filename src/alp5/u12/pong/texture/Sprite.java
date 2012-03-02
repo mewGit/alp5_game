@@ -48,10 +48,10 @@ public class Sprite {
 	private Texture	texture;
 
 	/** The width in pixels of this sprite */
-	private int			width;
+	private int	width;
 
 	/** The height in pixels of this sprite */
-	private int			height;
+	private int	height;
 
 	/**
 	 * Create a new sprite from a specified image.
@@ -62,6 +62,17 @@ public class Sprite {
 	public Sprite(TextureLoader loader, String ref) {
 	    try {
 	    	texture = loader.getTexture(ref);
+	    	width = texture.getImageWidth();
+	    	height = texture.getImageHeight();
+	    } catch (IOException ioe) {
+	    	ioe.printStackTrace();
+	      System.exit(-1);
+	    }
+	}
+	
+	public Sprite(TextureLoader loader, String ref, int x, int y, int w, int h) {
+	    try {
+	    	texture = loader.getTexture(ref, GL_TEXTURE_2D, GL_RGBA, GL_LINEAR, GL_LINEAR, x, y, w, h);
 	    	width = texture.getImageWidth();
 	    	height = texture.getImageHeight();
 	    } catch (IOException ioe) {
@@ -94,7 +105,7 @@ public class Sprite {
 	 * @param x The x location at which to draw this sprite
 	 * @param y The y location at which to draw this sprite
 	 */
-	public void draw(int x, int y) {
+	public void draw(float x, float y) {
 		// store the current model matrix
 		glPushMatrix();
 
@@ -121,6 +132,55 @@ public class Sprite {
 		glEnd();
 
 		// restore the model view matrix to prevent contamination
+		glPopMatrix();
+	}
+	
+	public void draw(float x, float y, float size) {
+		glPushMatrix();
+		texture.bind();
+		glTranslatef(x, y, 0);
+		glBegin(GL_QUADS);
+		{
+			glTexCoord2f(0, 0);
+			glVertex2f(0, height*size);
+			
+			glTexCoord2f(texture.getWidth(), 0);
+			glVertex2f(width*size, height*size);
+
+			glTexCoord2f(texture.getWidth(), texture.getHeight());
+			glVertex2f(width*size, 0);
+			
+			glTexCoord2f(0, texture.getHeight());
+			glVertex2f(0, 0);
+		}
+		glEnd();
+		glPopMatrix();
+	}
+	
+	public void draw(float x, float y, int w, int h) {
+		int s = w/width;
+		int t = h/height;
+		
+		glPushMatrix();
+		texture.bind();
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTranslatef(x, y, 0);
+		glBegin(GL_QUADS);
+		{
+			glTexCoord2f(0, 0);
+			glVertex2f(0, h);
+			
+			glTexCoord2f(s, 0);
+			glVertex2f(w, h);
+
+			glTexCoord2f(s, t);
+			glVertex2f(w, 0);
+			
+			glTexCoord2f(0, t);
+			glVertex2f(0, 0);
+		}
+		glEnd();
 		glPopMatrix();
 	}
 }

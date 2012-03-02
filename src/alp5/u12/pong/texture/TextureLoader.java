@@ -32,14 +32,19 @@
 package alp5.u12.pong.texture;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
+import java.awt.image.CropImageFilter;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
@@ -53,7 +58,6 @@ import java.util.Hashtable;
 import javax.swing.ImageIcon;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -70,8 +74,13 @@ import static org.lwjgl.opengl.GL11.*;
  * @author Kevin Glass
  * @author Brian Matzon
  */
-public class TextureLoader {
-    /** The table of textures that have been loaded in this loader */
+public class TextureLoader extends Component {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2106030760002631339L;
+
+	/** The table of textures that have been loaded in this loader */
     private HashMap<String, Texture> table = new HashMap<String, Texture>();
 
     /** The color model including alpha for the GL image */
@@ -108,7 +117,7 @@ public class TextureLoader {
      * @return A new texture ID
      */
     private int createTextureID() {
-    	GL11.glGenTextures(textureIDBuffer);
+    	glGenTextures(textureIDBuffer);
     	return textureIDBuffer.get(0);
     }
 
@@ -127,10 +136,11 @@ public class TextureLoader {
         }
 
         tex = getTexture(resourceName,
-        		GL11.GL_TEXTURE_2D, // target
-        		GL11.GL_RGBA,     // dst pixel format
-        		GL11.GL_LINEAR, // min filter (unused)
-        		GL11.GL_LINEAR);
+        		GL_TEXTURE_2D, // target
+        		GL_RGBA,     // dst pixel format
+        		GL_LINEAR, // min filter (unused)
+        		GL_LINEAR,
+        		0,0,0,0);
 
         table.put(resourceName,tex);
 
@@ -153,7 +163,8 @@ public class TextureLoader {
                               int target,
                               int dstPixelFormat,
                               int minFilter,
-                              int magFilter) throws IOException {
+                              int magFilter,
+                              int x, int y, int w, int h) throws IOException {
         int srcPixelFormat;
 
         // create the texture ID for this texture
@@ -161,9 +172,15 @@ public class TextureLoader {
         Texture texture = new Texture(target,textureID);
 
         // bind this texture
-        GL11.glBindTexture(target, textureID);
+        glBindTexture(target, textureID);
 
-        BufferedImage bufferedImage = loadImage(resourceName);
+        // XXX: hack
+        BufferedImage bufferedImage;
+        if ((x+y+w+h) == 0)
+        	bufferedImage = loadImage(resourceName);
+        else
+        	bufferedImage = loadImage(resourceName, x, y, w, h);
+        
         texture.setWidth(bufferedImage.getWidth());
         texture.setHeight(bufferedImage.getHeight());
 
@@ -177,19 +194,19 @@ public class TextureLoader {
         ByteBuffer textureBuffer = convertImageData(bufferedImage,texture);
 
         if (target == GL_TEXTURE_2D) {
-        	GL11.glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
-        	GL11.glTexParameteri(target, GL_TEXTURE_MAG_FILTER, magFilter);
+        	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter);
+        	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, magFilter);
         }
 
         // produce a texture from the byte buffer
-        GL11.glTexImage2D(target,
+        glTexImage2D(target,
                       0,
                       dstPixelFormat,
                       get2Fold(bufferedImage.getWidth()),
                       get2Fold(bufferedImage.getHeight()),
                       0,
                       srcPixelFormat,
-                      GL11.GL_UNSIGNED_BYTE,
+                      GL_UNSIGNED_BYTE,
                       textureBuffer );
 
         return texture;
@@ -239,11 +256,9 @@ public class TextureLoader {
         // create a raster that can be used by OpenGL as a source
         // for a texture
         if (bufferedImage.getColorModel().hasAlpha()) {
-        	System.out.println("Debug: Alpha");
             raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,4,null);
             texImage = new BufferedImage(glAlphaColorModel,raster,false,new Hashtable<String, Object>());
         } else {
-        	System.out.println("Debug: no Alpha");
             raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,3,null);
             texImage = new BufferedImage(glColorModel,raster,false,new Hashtable<String, Object>());
         }
@@ -262,7 +277,7 @@ public class TextureLoader {
         imageBuffer.order(ByteOrder.nativeOrder());
         imageBuffer.put(data, 0, data.length);
         imageBuffer.flip();
-
+        
         return imageBuffer;
     }
 
@@ -281,14 +296,34 @@ public class TextureLoader {
         }
 
         // due to an issue with ImageIO and mixed signed code
-        // we are now using good oldfashioned ImageIcon to load
+        // we are now using good old fashioned ImageIcon to load
         // images and the paint it on top of a new BufferedImage
         Image img = new ImageIcon(url).getImage();
         BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         Graphics g = bufferedImage.getGraphics();
         g.drawImage(img, 0, 0, null);
         g.dispose();
+        
+        return bufferedImage;
+    }
+    
+    //added by failure	XXX: bug: some times font is not loaded  
+    private BufferedImage loadImage(String ref, int x, int y, int w, int h) throws IOException {
+        URL url = TextureLoader.class.getClassLoader().getResource(ref);
 
+        if (url == null) {
+            throw new IOException("Cannot find: " + ref);
+        }
+        
+        Image tmp = new ImageIcon(url).getImage();
+        ImageFilter filter = new CropImageFilter(x, y, w, h);
+        ImageProducer producer = new FilteredImageSource(tmp.getSource(), filter);
+        Image img = createImage(producer);
+        BufferedImage bufferedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = bufferedImage.getGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+        
         return bufferedImage;
     }
 }

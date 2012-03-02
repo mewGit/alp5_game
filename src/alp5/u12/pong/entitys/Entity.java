@@ -4,6 +4,7 @@ import org.lwjgl.util.Rectangle;
 
 import alp5.u12.pong.Game;
 import alp5.u12.pong.texture.Sprite;
+import alp5.u12.pong.texture.TextureLoader;
 
 public abstract class Entity {
 	
@@ -14,9 +15,9 @@ public abstract class Entity {
 	protected Game game;
 	private Rectangle me = new Rectangle();; 
 	private Rectangle him = new Rectangle();
-	private boolean solid,collides;
-
-	public Entity(Game game, Sprite sprite, boolean solid) {
+	private static TextureLoader textureLoader = new TextureLoader();
+	
+	public Entity(Game game, Sprite sprite) {
 		this.game = game;
 		width = game.width;
 		height = game.height;
@@ -24,8 +25,6 @@ public abstract class Entity {
 		// later this will be the hit box for collision
 		boxWidth = this.sprite.getWidth();
 		boxHeight = this.sprite.getHeight();
-		this.solid = solid;
-		collides = false;
 	}
 	
 	public boolean collidesWith(Entity other) {
@@ -40,12 +39,22 @@ public abstract class Entity {
 		this.y = y;
 	}
 	
-	public abstract void handleCollision(int val);
-	
 	/**
 	 * render the texture associated with that entity
 	 */
 	public void draw() {
-		sprite.draw( (int)x , (int)y );
+		sprite.draw(x,y);
+	}
+	
+	public void draw(float size) {
+		sprite.draw(x,y,size);
+	}
+	
+	public static Sprite getSprite(String ref) {
+		return new Sprite(textureLoader, ref);
+	}
+	
+	public static Sprite getSprite(String ref, int x, int y, int w, int h) {
+		return new Sprite(textureLoader, ref, x, y, w, h);
 	}
 }

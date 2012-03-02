@@ -11,7 +11,7 @@ public class Ball extends Entity {
 	private final int maxSpeed = 8;
 
 	public Ball(Game game, String ref, float x, float y) {
-		super(game, game.getSprite(ref), true);
+		super(game, getSprite(ref));
 		this.x = x;
 		this.y = y;
 		dx = 0;

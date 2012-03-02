@@ -11,7 +11,7 @@ public class Player extends Entity {
 	private float speed = 4.0f;
 	
 	public Player(Game game, String ref, boolean player1) {
-		super(game, game.getSprite(ref), true);
+		super(game, getSprite(ref));
 		this.player1 = player1;
 		x = (this.player1) ? 0+16 : game.width-boxWidth-16;
 		y = (game.height-boxHeight)/2;
@@ -60,10 +60,5 @@ public class Player extends Entity {
 	public void setSpeed(float dx, float dy) {
 		this.dx = dx;
 		this.dy = dy;
-	}
-
-	@Override
-	public void handleCollision(int val) {
-		// TODO Auto-generated method stub
 	}
 }

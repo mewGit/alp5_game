@@ -46,7 +46,7 @@ public class ReadInput {
 						ip = ip.substring(0, ip.length()-1);
 					break;
 				case Keyboard.KEY_RETURN:
-					//TODO
+					ip += "F";
 					break;	
 				default:
 					break;
@@ -54,6 +54,5 @@ public class ReadInput {
 		    }
 		}
 		return ip;
-		
 	}
 }

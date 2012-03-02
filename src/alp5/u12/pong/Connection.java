@@ -13,7 +13,6 @@ import alp5.u12.pong.entitys.Player;
 
 public class Connection {
 
-	private Game game;
 	private InetAddress host;
 	private int port;
 	private DatagramSocket socket;
@@ -22,19 +21,21 @@ public class Connection {
 	// 0 = player Y 1; 1 = ball X; 2 = ball Y; 3 = player1; score 4 = player2 score 
 	private float[] gameState = new float[5];
 	
-	public Connection(Game game) {
-		this.game = game;
-	}
-	
 	// host
-	public void connect(int port) {
+	public boolean connect(int port) {
 		try {
 			socket = new DatagramSocket(port);
 			packetSend = new DatagramPacket(buf, buf.length);
+			socket.setSoTimeout(45000);
 			socket.receive(packetSend);
-			System.out.println("Debug: " + new String(packetSend.getData(), 0, packetSend.getLength()));
+//			System.out.println("Debug: " + new String(packetSend.getData(), 0, packetSend.getLength()));
 			packetReceive = new DatagramPacket(buf, buf.length);
 			socket.setSoTimeout(50);
+			packetSend.setData("Pong".getBytes());
+			socket.send(packetSend);
+		} catch (SocketTimeoutException e) {
+			socket.close();
+			return false;
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,13 +43,14 @@ public class Connection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return true;
 	}
 	
 	public void sendGameState(Ball ball, Player player, Score score) {
 		String tmp = Float.toString(player.y) +";"+ Float.toString(ball.x) +";"+ Float.toString(ball.y);
 		if (score.changed) {
 			score.changed = false;
-			tmp += ";"+ score.getScore()[0] +";"+ score.getScore()[1];
+			tmp += ";"+ score.p1 +";"+ score.p2;
 		}
 		packetSend.setData(tmp.getBytes(), 0, tmp.length());
 		try {
@@ -74,18 +76,24 @@ public class Connection {
 	}
 	
 	// client
-	public void connect(String host, int port) {
+	public boolean connect(String host, int port) {
 		try {
 			this.host = InetAddress.getByName(host);
 			this.port = port;
-			packetSend = new DatagramPacket("Hello".getBytes(), 5, this.host, this.port);
+			packetSend = new DatagramPacket("Ping".getBytes(), 4, this.host, this.port);
 			socket = new DatagramSocket();
-			socket.setSoTimeout(50);
+			socket.setSoTimeout(3000);
 			socket.send(packetSend);
 			packetReceive = new DatagramPacket(buf, buf.length);
+			socket.receive(packetReceive);
+//			System.out.println("Debug: " + new String(packetReceive.getData(), 0, packetReceive.getLength()));
+			socket.setSoTimeout(50);
+		} catch (SocketTimeoutException e) {
+			socket.close();
+			return false;
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			socket.close();
+			return false;
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,6 +101,7 @@ public class Connection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return true;
 	}
 	
 	public float[] reciveGameState(Ball ball, Player player, Score score) {
@@ -105,9 +114,12 @@ public class Connection {
 				ball.y = Float.valueOf(tmp[2]);
 			}
 			if (tmp.length == 5) {
-				score.score[0] = Integer.parseInt(tmp[3]);
-				score.score[1] = Integer.parseInt(tmp[4]);
+				score.changed = true;
+				score.p1 = Integer.parseInt(tmp[3]);
+				score.p2 = Integer.parseInt(tmp[4]);
 			}
+		} catch (SocketTimeoutException e) {
+			// XXX: do nothing
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
